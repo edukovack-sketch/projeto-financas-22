@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador Financeiro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="app">
+        <section class="hero">
+            <div class="hero-copy">
+                <span class="hero-badge">Planejamento mensal</span>
+                <h1>Seu organizador financeiro mes a mes</h1>
+                <p>Registre gastos, acompanhe suas economias, defina metas e veja um resumo visual do seu mes sem complicacao.</p>
+                <div class="hero-highlights" aria-label="Recursos principais">
+                    <span class="highlight-chip">Saldo em tempo real</span>
+                    <span class="highlight-chip">Controle por categoria</span>
+                    <span class="highlight-chip">Exportacao rapida</span>
+                </div>
+            </div>
+
+            <div class="month-card">
+                <div class="month-card-top">
+                    <span class="mini-label">Painel do mes</span>
+                    <span class="live-dot">Atualizado</span>
+                </div>
+                <label for="mesSelecionado">Mes de controle</label>
+                <input id="mesSelecionado" type="month">
+                <button id="atualizarTudo" class="ghost-button" type="button" aria-label="Atualizar todos os dados da tela">Atualizar tudo</button>
+                <p>Os dados ficam salvos no navegador e cada mes tem seu proprio historico, meta e categorias.</p>
+            </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Resumo do mes">
+            <article class="summary-card revenue">
+                <span class="summary-label">Renda mensal</span>
+                <strong id="totalRenda">R$ 0,00</strong>
+                <small>Valor recebido no mes</small>
+            </article>
+
+            <article class="summary-card income">
+                <span class="summary-label">Valor guardado</span>
+                <strong id="totalGuardado">R$ 0,00</strong>
+                <small>Total separado como economia no mes</small>
+            </article>
+
+            <article class="summary-card expense">
+                <span class="summary-label">Gastos</span>
+                <strong id="totalGastos">R$ 0,00</strong>
+                <small>Total gasto no mes</small>
+            </article>
+
+            <article class="summary-card balance">
+                <span class="summary-label">Saldo disponivel</span>
+                <strong id="saldoMensal">R$ 0,00</strong>
+                <small id="statusSaldo">Adicione movimentacoes para comecar</small>
+            </article>
+        </section>
+
+        <section class="insight-grid">
+            <article class="panel">
+                <div class="panel-heading">
+                    <span class="section-kicker">Entrada principal</span>
+                    <h2>Renda mensal</h2>
+                    <p>Informe quanto voce recebe no mes para acompanhar quanto ainda fica disponivel apos gastos e economias.</p>
+                </div>
+
+                <form id="rendaForm" class="meta-form">
+                    <div class="field">
+                        <label for="rendaValor">Valor da renda</label>
+                        <input id="rendaValor" name="rendaValor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex.: 2500.00">
+                    </div>
+
+                    <div class="meta-actions">
+                        <button class="primary-button" type="submit">Salvar renda</button>
+                        <button id="removerRenda" class="ghost-button" type="button">Remover renda</button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <span class="section-kicker">Objetivo</span>
+                    <h2>Meta de economia</h2>
+                    <p>Defina quanto deseja separar neste mes e acompanhe seu progresso automaticamente.</p>
+                </div>
+
+                <form id="metaForm" class="meta-form">
+                    <div class="field">
+                        <label for="metaValor">Valor da meta</label>
+                        <input id="metaValor" name="metaValor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex.: 500.00">
+                    </div>
+
+                    <div class="meta-actions">
+                        <button class="primary-button" type="submit">Salvar meta</button>
+                        <button id="removerMeta" class="ghost-button" type="button">Remover meta</button>
+                    </div>
+                </form>
+
+                <div class="meta-status">
+                    <div class="meta-status-line">
+                        <span>Progresso da meta</span>
+                        <strong id="metaProgressoTexto">Nenhuma meta definida</strong>
+                    </div>
+                    <div class="progress-track" aria-hidden="true">
+                        <div id="metaProgressoBarra" class="progress-fill"></div>
+                    </div>
+                    <p id="metaMensagem">Defina uma meta para acompanhar quanto voce ja separou como economia neste mes.</p>
+                </div>
+            </article>
+
+            <article class="panel panel-span-2">
+                <div class="panel-heading">
+                    <span class="section-kicker">Analise visual</span>
+                    <h2>Grafico do mes</h2>
+                    <p>Veja rapidamente em quais categorias voce mais gastou e quanto separou como economia.</p>
+                </div>
+
+                <div id="graficoCategorias" class="chart-list" aria-live="polite"></div>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel">
+                <div class="panel-heading">
+                    <span class="section-kicker">Novo registro</span>
+                    <h2>Novo lancamento</h2>
+                    <p>Cadastre uma movimentacao e acompanhe o impacto no seu mes.</p>
+                </div>
+
+                <form id="financeForm" class="finance-form">
+                    <div class="field">
+                        <label for="descricao">Descricao</label>
+                        <input id="descricao" name="descricao" type="text" maxlength="60" placeholder="Ex.: Mercado, reserva, aluguel" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="valor">Valor</label>
+                        <input id="valor" name="valor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex.: 120.50" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="tipo">Tipo</label>
+                        <select id="tipo" name="tipo">
+                            <option value="gasto">Gasto</option>
+                            <option value="guardado">Guardar como economia</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="categoria">Categoria</label>
+                        <input id="categoria" name="categoria" type="text" maxlength="30" placeholder="Ex.: Casa, transporte, meta">
+                    </div>
+
+                    <button class="primary-button" type="submit">Adicionar lancamento</button>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading list-heading">
+                    <div>
+                        <span class="section-kicker">Extrato</span>
+                        <h2>Movimentacoes do mes</h2>
+                        <p id="listaResumo">Nenhum lancamento registrado ainda.</p>
+                    </div>
+
+                    <div class="header-actions">
+                        <button id="exportarCsv" class="ghost-button" type="button">Exportar CSV</button>
+                        <button id="limparMes" class="ghost-button" type="button">Limpar mes</button>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="field">
+                        <label for="filtroCategoria">Filtrar por categoria</label>
+                        <select id="filtroCategoria">
+                            <option value="todas">Todas as categorias</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="listaLancamentos" class="transaction-list" aria-live="polite"></div>
+            </article>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
